@@ -5,10 +5,11 @@ import random
 
 # Relationship = namedtuple("Relationship", ["node", "temperature"])
 
+
 @dataclass(frozen=True)
 class Relationship:
     name: str
-    temperature: float = 1.0 
+    temperature: float = 1.0
 
 
 class SecretSantaGraph:
@@ -24,8 +25,14 @@ class SecretSantaGraph:
 
         self._nodes[from_node].append(Relationship(to_node, temperature))
 
-    def _get_valid_relationships(self, node, lower, upper):
-        return [r for r in self._nodes[node] if lower <= r.temperature < upper]
+    def _get_valid_relationships(
+        self, name: str, lower: float = 0.0, upper: float = 1.0
+    ):
+        return [
+            r
+            for r in self._nodes[name]
+            if lower <= r.temperature and r.temperature < upper
+        ]
 
     def generate_pairs(self, lower=0, upper=1):
         assigned_receiver = set()
@@ -36,11 +43,13 @@ class SecretSantaGraph:
         while queue:
             giver = queue.popleft()
 
-            valid_relationships = set(self._get_valid_relationships(giver, lower, upper))
+            valid_relationships = set(
+                self._get_valid_relationships(giver, lower, upper)
+            )
             valid_receivers = list(valid_relationships - assigned_receiver)
 
             # Defensive checks
-            if (giver in assigned_receiver):
+            if giver in assigned_receiver:
                 continue
 
             if valid_receivers is None:
@@ -58,33 +67,6 @@ class SecretSantaGraph:
             assigned_gifter.add(receiever)
 
         return pairs
-
-    # def generate_pairs(self, lower=0, upper=1):
-    #     assigned_receiver = set()
-    #     assigned_gifter = set()
-    #     queue = deque(self._nodes.keys())
-    #     pairs = []
-
-    #     while queue:
-    #         giver = queue.popleft()
-    #         valid_relationships = set(self._get_valid_relationships(giver, lower, upper))
-    #         valid_receivers = list(valid_relationships - assigned_gifter)
-            
-    #         # Defensive checks
-    #         if (giver in assigned_receiver) or (valid_relationships is None):
-    #             continue
-            
-    #         receiever = None
-    #         while receiever is None:
-    #             receiever = random.choice(valid_receivers)
-    #             if receiever in assigned_gifter:
-    #                 receiever = None
-                
-    #         pairs.append((giver, receiever.name))
-    #         assigned_receiver.add(giver)
-    #         assigned_gifter.add(receiever)
-
-    #     return pairs
 
 
 ############################################
@@ -117,4 +99,5 @@ santa.add_relationship("David", "Bob", 0.6)
 santa.add_relationship("David", "Charlie", 0.7)
 
 # Generate pairs with temperature range 0.5 to 0.8
-santa.generate_pairs(lower=0, upper=7)
+pairs = santa.generate_pairs(lower=0, upper=0.8)
+print(pairs)
