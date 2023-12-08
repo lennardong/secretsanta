@@ -1,4 +1,4 @@
-# Python
+# ignore for Python
 *.pyc
 __pycache__/
 *.pyo
@@ -12,3 +12,95 @@ __pycache__/
 dist/
 build/
 venv/
+*.egg
+*.manifest
+*.spec
+
+# ignore for Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+yarn.lock
+.pnp/
+.pnp.js
+
+# SvelteKit / Sapper
+__sapper__/
+.cjs
+.mjs
+.ts
+.tsbuildinfo
+.svelte-kit
+/build
+*.svelte.js
+*.svelte.js.map
+
+# ignore for ide
+.idea/
+.vscode/
+*.sublime-workspace
+
+# gitignore for pytests 
+# pytest
+.pytest_cache/
+pytest.ini
+*.ini
+
+# ignore for Flask
+instance/
+.webassets-cache
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore config files
+/config/*.json
+
+# ignore deployment files
+/deploy/*
+!/deploy/*.example
+
+# ignore production files
+/production/*
+!/production/*.example
+
+# Ignore certain CI configuration files
+/.travis.yml
+/circle.yml
+/.gitlab-ci.yml
+
+# Ignore Docker generated files
+/docker-compose.yml
+/dockerfile
+.dockerignore
+
+# Ignore coverage directories
+coverage/
+.nyc_output/
+
+# Ignore artifacts of local testing
+/pacts/
+.pact-testing/
