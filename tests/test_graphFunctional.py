@@ -54,7 +54,7 @@ def test_get_valid_relationships():
     # Get valid relationships
     lower_bound = 0.4
     upper_bound = 0.6
-    valid_relationships = graph._get_valid_relationships(node_a, lower_bound, upper_bound)
+    valid_relationships = graph.get_valid_relationships(node_a, lower_bound, upper_bound)
 
     # Verify only the valid relationship is returned
     assert len(valid_relationships) == 1
