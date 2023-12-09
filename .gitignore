@@ -86,6 +86,7 @@ yarn-error.log*
 # ignore production files
 /production/*
 !/production/*.example
+archive/
 
 # Ignore certain CI configuration files
 /.travis.yml
