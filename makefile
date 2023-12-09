@@ -51,8 +51,7 @@ gcp-deploy_OLD:
 gcp-deploy:
 	gcloud run deploy --source
 
-################################################################################
-# PYTHON
+############################################################################### PYTHON
 ################################################################################
 
 # Install dependencies
@@ -71,6 +70,9 @@ format:
 # Run tests
 test:
 	python -m pytest -vv --cov=vision --pyargs -k test_vision
+
+run_fast:
+	uvicorn main:app --reload
 
 # Run tests
 # test:

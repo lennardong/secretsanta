@@ -3,9 +3,6 @@ from dataclasses import dataclass
 import random
 
 
-# Relationship = namedtuple("Relationship", ["node", "temperature"])
-
-
 @dataclass(frozen=True)
 class Relationship:
     name: str

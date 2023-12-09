@@ -2,6 +2,10 @@
 
 This is a fun repo to work through the secret santa problem. 
 
+# Overall Architecture
+
+Lets walk through the concepts so you understand the architecture 
+
 ## Backend Infrastructure
 
 **For infrastructure, you’re going to 1) deploy as source to a 2) container service** 
