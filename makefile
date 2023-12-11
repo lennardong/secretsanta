@@ -72,6 +72,8 @@ test:
 	python -m pytest -vv --cov=vision --pyargs -k test_vision
 
 run_fast:
+	cd backend &&\
+	source venv/bin/activate &&\
 	uvicorn main:app --reload
 
 # Run tests

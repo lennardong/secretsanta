@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from src.graph_functional import SecretSantaGraph
 from typing import List, Dict, Tuple, Union, Optional
-
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -28,27 +28,65 @@ async def test_endpoint(query: int):
 ########################################
 # Implementation
 ########################################
-
 santa = SecretSantaGraph()
 
-@app.post("/relationships/add")
-async def add_relationship(
-    person1: str, 
-    person2: str, 
+# IMLPEMENTATION WO Pydantic.
+
+# Rquires use of Body
+# @app.post("/relationships/add/single")
+# async def add_single_relationship(
+#         person1: str = Body(...),
+#         person2: str = Body(...),
+#         strength: float = Body(...)
+# ):
+#     try:
+#         santa.add_relationship(person1, person2, strength)
+#         return {
+#             "message": "Relationship added successfully",
+#             "person1": person1,
+#             "person2": person2,
+#             "strength": strength,
+#         }
+#     except Exception as e:
+#         print(f"Error adding relationship: {e}")
+#         return {
+#             "message": "Failed to add relationship",
+#             "error": str(e),
+#         }
+
+# IMPLEMENTATION W PYDANTIC
+
+class RelationshipCreation(BaseModel):
+    """
+    Pydantic model for a relationship request.
+    """
+    person1: str
+    person2: str
     strength: float
-    ):
 
-    santa.add_relationship(person1, person2, strength)
 
-    return {
-        "message": "Relationship added successfully",
-        "person1": person1,
-        "person2": person2,
-        "strength": strength,
-    }
+@app.post("/relationships/add/single")
+async def add_single_relationship(relationship: RelationshipCreation):
+    try:
+        santa.add_relationship(relationship.person1, relationship.person2, relationship.strength)
+        return {
+            "message": "Relationship added successfully",
+            "person1": relationship.person1,
+            "person2": relationship.person2,
+            "strength": relationship.strength,
+        }
+    except Exception as e:
+        print(f"Error adding relationship: {e}")
+        return {
+            "message": "Failed to add relationship",
+            "error": str(e),
+        }
+
 
 @app.post("/relationships/add/batch")
-async def add_relationships(relationship_data: List[dict]):
+async def add_relationships(
+   relationship_data: List[dict]
+   ):
   """
   Add multiple relationships in a single request.
 
@@ -76,8 +114,7 @@ async def add_relationships(relationship_data: List[dict]):
   Returns:
       A JSON object with a message and a list of successful and unsuccessful relationship additions.
 
-  Raises:
-      ValueError: If the number of relationships exceeds the limit or the data is invalid.
+  Raises: ValueError: If the number of relationships exceeds the limit or the data is invalid.
   """
 
   if len(relationship_data) > 100:
