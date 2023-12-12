@@ -2,7 +2,6 @@
   import svelteLogo from './assets/svelte.svg'
   import viteLogo from '/vite.svg'
   import Counter from './lib/Counter.svelte'
-  import SantaForm from './lib/SantaForm.svelte'
 </script>
 
 <main>
@@ -18,12 +17,8 @@
 
   <div class="card">
     <Counter />
-    <Counter />
-    <Counter />
-    <Counter />
   </div>
 
-    <SantaForm />
   <p>
     Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
   </p>
