@@ -1,52 +1,72 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
-  import SantaForm from './lib/SantaForm.svelte'
+  import svelteLogo from './assets/svelte.svg';
+  import viteLogo from '/vite.svg';
+  import Counter from './lib/Counter.svelte';
+  import About from './lib/About.svelte';
+  import InputForm from './lib/InputForm.svelte';
+  import OutputPairs from './lib/OutputPairs.svelte';
 </script>
 
+
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <div class = "frame">
+
+    <div class="container">
+      <div class="sub-container" id="A1">
+        <About />
+      </div>
+      <div class="sub-container" id="A2">
+        <InputForm />
+      </div>
+      <div class="sub-container" id="A3">
+        <OutputPairs />
+      </div>
+    </div>
+
+    <footer class="footer" id="B">
+      <p>built by lennardong | Github Repo</p>
+    </footer>
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-    <Counter />
-    <Counter />
-    <Counter />
-  </div>
-
-    <SantaForm />
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  .frame {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 90vw;
+    border: 1px solid black;
+    box-sizing: border-box;
+    text-align: left;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  .container {
+    display: flex;
+    flex: 1; /* Take the remaining height */
+    background: #fff; /* Background color for A */
+    border-bottom: 1px solid black;
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  .sub-container {
+    flex-direction: column;
+    flex: 1; /* Distribute space equally */
+    display: flex;
+    justify-content: left; /* Center content horizontally */
+    align-items: baseline;
+    border-right: 1px solid black; /* Add right border */
+    padding: 2rem;
   }
-  .read-the-docs {
-    color: #888;
+
+  /* Remove the right border for the last sub-container */
+  .sub-container:last-child {
+    border-right: none;
+  }
+
+  .footer {
+    height: auto; /* Auto height based on content */
+    padding: 0.5rem; /* Padding for some space */
+    padding-right: 2rem;
+    text-align: right; /* Center text */
+    background: white; /* Background color for B */
   }
 </style>
