@@ -1,36 +1,61 @@
+<!-- ############################################ -->
+<!-- # LOGIC (JS)-->
+<!-- ############################################ -->
+
 <script>
-  import svelteLogo from './assets/svelte.svg';
-  import viteLogo from '/vite.svg';
+  // Import components
+  import viteLogo from './assets/vite.svg';
   import Counter from './lib/Counter.svelte';
   import About from './lib/About.svelte';
   import InputForm from './lib/InputForm.svelte';
   import OutputPairs from './lib/OutputPairs.svelte';
+
+  // create a variable and assign output to it
+  let outputData = '...waiting for inputs';
+  function handleUpdate(event){
+    outputData = event.detail; 
+  }
+
 </script>
 
+<!-- ############################################ -->
+<!-- # CONTENT (HTML) -->
+<!-- ############################################ -->
 
 <main>
-  <div class = "frame">
+  <div id = "frame">
 
-    <div class="container">
-      <div class="sub-container" id="A1">
+
+
+    <!-- BODY -->
+
+    <div id = "container" >
+      <div id="sub-container">
         <About />
       </div>
-      <div class="sub-container" id="A2">
-        <InputForm />
+      <div id="sub-container">
+        <InputForm on:update={handleUpdate} />
       </div>
-      <div class="sub-container" id="A3">
-        <OutputPairs />
+      <div id="sub-container">
+        <OutputPairs pairings = {outputData}/>
       </div>
     </div>
 
-    <footer class="footer" id="B">
+    <!-- FOOTER -->
+
+    <footer id="footer" class="footer">
       <p>built by lennardong | Github Repo</p>
     </footer>
+
   </div>
 </main>
 
+<!-- ############################################ -->
+<!-- # STYLES (CSS) -->
+<!-- ############################################ -->
+
 <style>
-  .frame {
+  #frame {
     display: flex;
     flex-direction: column;
     height: 90vh;
@@ -40,33 +65,37 @@
     text-align: left;
   }
 
-  .container {
+  #container {
     display: flex;
-    flex: 1; /* Take the remaining height */
-    background: #fff; /* Background color for A */
-    border-bottom: 1px solid black;
+    flex-direction: row;
+    flex: 1;  
+    
   }
 
-  .sub-container {
+  #sub-container {
     flex-direction: column;
     flex: 1; /* Distribute space equally */
     display: flex;
     justify-content: left; /* Center content horizontally */
     align-items: baseline;
-    border-right: 1px solid black; /* Add right border */
-    padding: 2rem;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 2em;
   }
 
-  /* Remove the right border for the last sub-container */
-  .sub-container:last-child {
+  #sub-container:last-child {
     border-right: none;
   }
 
-  .footer {
+  #footer {
     height: auto; /* Auto height based on content */
     padding: 0.5rem; /* Padding for some space */
     padding-right: 2rem;
-    text-align: right; /* Center text */
-    background: white; /* Background color for B */
+    text-align: right;
+    font-size: smaller;
+  }
+
+  .footer{
+    text-align: right;
   }
 </style>

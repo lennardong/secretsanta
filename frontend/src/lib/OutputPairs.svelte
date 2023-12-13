@@ -1,8 +1,51 @@
+<!-- ############################################ -->
+<!-- # LOGIC -->
+<!-- ############################################ -->
+
 <script>
-    let count = 0
-    const increment = () => {
-      count += 1
-    }
-  </script>
-  
- <h1>Secret Santa</h1>
+  export let pairings  
+
+</script>
+
+<!-- ############################################ -->
+<!-- # CONTENT -->
+<!-- ############################################ -->
+
+<b>Pairings</b>
+<div class = "output-container">
+  <textarea bind:value={pairings}></textarea>
+</div>
+
+<!-- ############################################ -->
+<!-- # STYLES -->
+<!-- ############################################ -->
+
+<style>
+  .output-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+  }
+  b{
+    margin-bottom: 1rem;
+  }
+  textarea {
+    flex: 1;
+    padding: 10px;
+    line-height: 1em;
+    border-radius: 0px;
+    height: 100%;
+    width: 100%;
+    
+    margin-bottom: 1rem;
+    font-size: 10px;
+    font-family: "Consolas", monospace;
+    border: 1px solid rgb(0, 0, 0);
+    color: black;
+    background: rgb(255, 255, 255);
+  }
+</style>

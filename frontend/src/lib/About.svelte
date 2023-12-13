@@ -1,4 +1,11 @@
-<h1>SecretSanta</h1>
+<script>
+
+</script>
+
+<!-- ############################################ -->
+<div id = "title">
+    <h1>🎄 SecretSanta</h1>
+</div>
 
 <b>
     What's the problem?
@@ -18,3 +25,12 @@
     and include any special exclusions. A valid output will be generated for you
     to use and share with all participants!
 </p>
+
+<!-- ############################################ -->
+<style>
+    
+  #title{
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+  }
+</style>
