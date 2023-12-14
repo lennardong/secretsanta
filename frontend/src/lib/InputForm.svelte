@@ -5,29 +5,40 @@
 <!-- ############################################ -->
 
 <script>
-  // Input variable
-  let input = `
-# 
-Larry (Gerald, MaryJ), Hannah, Mary, Jane 
-
-# 
-Gerald, MaryJ 
-
-#
-Anthony (Larry, Mary), Lucy, Kerry, Perry (Gerald, MaryJ)
-`
-  // Event trigger as callback function
+  import { parseParticipants } from "../utils/parseParticipants";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   
-  // Parse inputs and trigger callback
-  function handleButtonClick(_input) {
-    console.log(_input);
-    let result = _input;
-    dispatch('update', result)
-  }
+  let input = `
+  # 
+  Larry (Gerald, MaryJ)
+  Hannah
+  Mary
+  Jane 
+  # 
+  Gerald
+  MaryJ 
+  #
+  Anthony (Larry, Mary)
+  Lucy
+  Kerry
+  Perry (Gerald, MaryJ)
+  `
 
+  async function handleButtonClick(_input) {
+    try {
+      const result = await parseParticipants(_input);
+      console.log(result);
+      dispatch('update', result);
+    } catch (error) {
+      console.error('Error parsing participants:', error);
+      dispatch('error', error.message);
+    }
+  }
 </script>
+
+<!-- Your HTML structure here -->
+
 
 <!-- ############################################ -->
 <!-- # CONTENT -->
@@ -48,7 +59,7 @@ Anthony (Larry, Mary), Lucy, Kerry, Perry (Gerald, MaryJ)
 
 <div class="form-container">
   <textarea bind:value={input}></textarea>
-  <button on:click={() => {handleButtonClick(input)}}>
+  <button on:click={async () => {await handleButtonClick(input)}}>
     Generate Pairings
   </button>
 </div>
@@ -72,10 +83,6 @@ Anthony (Larry, Mary), Lucy, Kerry, Perry (Gerald, MaryJ)
     width: 100%;
     box-sizing: border-box;
     padding: 5px;
-  }
-
-  h2 {
-    margin-bottom: 0;
   }
 
   textarea {
