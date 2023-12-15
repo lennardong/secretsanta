@@ -3,17 +3,26 @@
 <!-- ############################################ -->
 
 <script>
-  export let pairings  
+  export let pairings;
 
+  let formattedPairings = '';
+
+  // Format pairings whenever the `pairings` prop changes
+  $: if (pairings) {
+    formattedPairings = pairings.map(([gifter, giftee]) => 
+      `${gifter} -> ${giftee}`).join('\n');
+  }
 </script>
+
+
 
 <!-- ############################################ -->
 <!-- # CONTENT HTML -->
 <!-- ############################################ -->
 
 <b>Pairings</b>
-<div class = "output-container">
-  <textarea bind:value={pairings}></textarea>
+<div class="output-container">
+  <textarea bind:value={formattedPairings} readonly></textarea>
 </div>
 
 <!-- ############################################ -->

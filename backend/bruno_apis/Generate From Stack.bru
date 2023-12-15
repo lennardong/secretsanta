@@ -1,0 +1,32 @@
+meta {
+  name: Generate From Stack
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://127.0.0.1:8000/api/secret-santa-stack/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "names": {
+      "Clive": ["Alma", "Amy"],
+      "Alma": ["Clive", "Amy"],
+      "Andrew": ["Emma", "Evelyn", "William"],
+      "Emma": ["Andrew", "Evelyn", "William"],
+      "Lennard": ["Lara", "Leah", "Maya"],
+      "Lara": ["Lennard", "Leah", "Maya"],
+      "Wayne": ["Amy"],
+      "Amy": ["Wayne", "Clive", "Alma"],
+      "Annie": [],
+      "Leah": ["Lennard", "Lara", "Maya"],
+      "Maya": ["Lennard", "Lara", "Leah"],
+      "William": ["Andrew", "Emma", "Evelyn"],
+      "Evelyn": ["Andrew", "Emma", "William"]
+    }
+  }
+  
+}
