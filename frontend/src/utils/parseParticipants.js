@@ -1,3 +1,9 @@
+/*
+  This file contains the logic for parsing the input from the form and calling the API.
+  It takes in input as a full string then formats it to a dictionary of participants and their exclusions.
+  The API call is made to the backend.
+*/
+
 const BASE_URL = 'http://127.0.0.1:8000';
 
 async function callApi(data) {

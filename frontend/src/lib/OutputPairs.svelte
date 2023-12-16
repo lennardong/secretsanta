@@ -7,11 +7,19 @@
 
   let formattedPairings = '';
 
+  // $: if (pairings) {
+  //     formattedPairings = pairings.map(([gifter, giftee]) => 
+  //       `${gifter} -> ${giftee}`).join('\n');
+  //   }
+
   // Format pairings whenever the `pairings` prop changes
-  $: if (pairings) {
-    formattedPairings = pairings.map(([gifter, giftee]) => 
-      `${gifter} -> ${giftee}`).join('\n');
+  $: if (Array.isArray(pairings)) {
+  formattedPairings = pairings.map(([gifter, giftee]) => 
+    `${gifter} -> ${giftee}`).join('\n');
+  } else {
+  formattedPairings = '... make a participant pool';
   }
+
 </script>
 
 
@@ -22,7 +30,7 @@
 
 <b>Pairings</b>
 <div class="output-container">
-  <textarea bind:value={formattedPairings} readonly></textarea>
+  <textarea bind:value={formattedPairings}></textarea>
 </div>
 
 <!-- ############################################ -->

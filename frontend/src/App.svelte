@@ -4,8 +4,6 @@
 
 <script>
   // Import components
-  import viteLogo from './assets/vite.svg';
-  import Counter from './lib/Counter.svelte';
   import About from './lib/About.svelte';
   import InputForm from './lib/InputForm.svelte';
   import OutputPairs from './lib/OutputPairs.svelte';
@@ -24,8 +22,6 @@
 
 <main>
   <div id = "frame">
-
-
 
     <!-- BODY -->
 
