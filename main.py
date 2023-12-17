@@ -1,18 +1,24 @@
+# Misc
 from dataclasses import Field
+from typing import List, Dict, Tuple, Union, Optional
+
+# FastAPi
 from fastapi import FastAPI, Body, HTTPException 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from src.graph_functional import SecretSantaGraph
-from typing import List, Dict, Tuple, Union, Optional
 from pydantic import BaseModel
-from src.stack import generate_secretSanta
 
+# Project Files
+from src.stack import generate_secretSanta
+from src.graph_functional import SecretSantaGraph
+
+
+# INIT
 app = FastAPI()
 
 ########################################
 # Tinkering
 ########################################
-
 
 @app.get("/")
 async def root():
@@ -32,7 +38,7 @@ async def test_endpoint(query: int):
 ########################################
 # Implementation: Stack
 ########################################
-# Configure CORS
+# Configure CORS for local dev
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Allows all origins
@@ -59,11 +65,8 @@ async def generate_secret_santa(input: SecretSantaInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-app.mount("/static", StaticFiles(directory="frontend/dist/", html=True), name="static")
-
-# enable the route for static assets
-app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))
-
+app.mount("/static", StaticFiles(directory="frontend/dist/", html=True), name="static")  # Serve the static HTML file
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))  # enable the route for static assets
 
 
 ########################################
