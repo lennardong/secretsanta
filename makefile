@@ -2,14 +2,17 @@
 $(info Current directory: $(CURDIR))
 
 # Docker image name and tag
-DOCKER_IMAGE := sentry-image 
+DOCKER_IMAGE := santa-image
 DOCKER_TAG := latest
 
 # GCP Variables
-PROJECT_ID := sentry-microservice-alps
-IMAGE_NAME := sentry-image
-SERVICE_NAME := sentry-service
+PROJECT_ID := secretsanta-407502
+IMAGE_NAME := santa-image
+SERVICE_NAME := santa-service
 REGION := asia-southeast1
+ARTEFACT_REPO := secretsanta-repo
+
+all_local: frontend_build docker_build_local docker_run_local
 
 ################################################################################
 # DOCKER
@@ -18,20 +21,25 @@ REGION := asia-southeast1
 # Build Docker image
 docker_build_local:
 	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
-# docker_build_local:
-#     docker buildx build -f Dockerfile --context . -t $(DOCKER_IMAGE):$(DOCKER_TAG)
 
 # Run Docker container
+# docker_run_local:
+# 	docker run -p 8080:8080 -e PORT=8080 --name secretsanta_container $(DOCKER_IMAGE):$(DOCKER_TAG)
+# 	# docker run -p 8080:8080 -e PORT=8080 $(DOCKER_IMAGE):$(DOCKER_TAG) 
+# 	# docker_run_local:
+# 	# NOTE: adding the --name flag causes an error
+
 docker_run_local:
 	docker run -p 8080:8080 -e PORT=8080 $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+
 # Clean up images and containers
 docker_clean_local:
-	docker image rm $(DOCKER_IMAGE):$(DOCKER_TAG)
+	docker stop $$(docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}') && \
+	docker rm $$(docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}') && \
+	docker rmi "$(DOCKER_IMAGE):$(DOCKER_TAG)"
 
 # Push Docker image to Google Container Registry
-docker_push_gcr:
-	docker push gcr.io/$(PROJECT_ID)/$(DOCKER_IMAGE):$(DOCKER_TAG)
 
 ################################################################################
 # GCP
@@ -42,56 +50,59 @@ docker_push_gcr:
 # 2) push to container registry 
 # 3) deploy to Cloud Run
 
-gcp-deploy_OLD:
-	gcloud builds submit . \
-	--config cloudbuild.yaml \
-	--substitutions=_PROJECT_ID=${PROJECT_ID},_IMAGE_NAME=${IMAGE_NAME},_SERVICE_NAME=${SERVICE_NAME},_REGION=${REGION} \
-	--project ${PROJECT_ID}
+gcp_build_img:
+	docker build -t $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) . && \
+	docker push $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) && \
+	docker rmi "$(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG)"
 
-gcp-deploy:
-	gcloud run deploy --source
+gcp_pushToCloudRun:
+	gcloud services enable run.googleapis.com && \
+	gcloud run deploy $(SERVICE_NAME) \
+		--image $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) \
+		--platform managed \
+		--region $(REGION) \
+		--allow-unauthenticated
 
-############################################################################### PYTHON
+
+# gcloud builds submit --tag gcr.io/$(PROJECT_ID)/$(DOCKER_IMAGE):$(DOCKER_TAG) .
+############################################################################### 
+# PYTHON
 ################################################################################
 
 # Install dependencies
-install:
+python_install:
 	pip install --upgrade pip &&\
-		pip install -r requirements.txt
+	pip install -r requirements.txt
 
 # Lint code
-lint:
+python_lint:
 	python -m pylint --disable=R,C --extension-pkg-allow-list=cv2 *.py
 
 # Format code
-format:
+python_format:
 	python -m black *.py
 
 # Run tests
-test:
+python_test:
 	python -m pytest -vv --cov=vision --pyargs -k test_vision
 
-run_fast:
+python_test_server:
 	source venv/bin/activate &&\
 	uvicorn main:app --reload
+
+
+############################################
+# FRONT END 
+############################################
+
+frontend_build:
+	cd frontend &&\
+	npm run build
+
+frontend_dev:
+	cd frontend &&\
+	npm run dev
 
 # Run tests
 # test:
 # 	python -m pytest -vv --pyargs -k test_
-
-################################################################################
-# OLD
-################################################################################
-# 
-# docker_build_gcr:
-# 	docker build -t gcr.io/$(PROJECT_ID)/$(DOCKER_IMAGE):$(DOCKER_TAG) .
-
-# # Deploy to Cloud Build
-# google_cloudbuild: 
-# 	gcloud builds submit --config cloudbuild.yaml .
-
-# google_gcr_deploy:
-# 	gcloud run deploy $(APP_NAME) \
-# 		--image gcr.io/$(PROJECT_ID)/$(DOCKER_IMAGE):$(DOCKER_TAG) \
-# 		--platform managed \
-# 		--allow-unauthenticated

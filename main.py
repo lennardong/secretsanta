@@ -3,15 +3,15 @@ from dataclasses import Field
 from typing import List, Dict, Tuple, Union, Optional
 
 # FastAPi
-from fastapi import FastAPI, Body, HTTPException 
+from fastapi import FastAPI, Body, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+# from fastapi.middleware.cors import CORSMiddleware
 
 # Project Files
-from src.stack import generate_secretSanta
-from src.graph_functional import SecretSantaGraph
-
+from core.stack import generate_secretSanta
+from core.graph_functional import SecretSantaGraph
 
 # INIT
 app = FastAPI()
@@ -24,11 +24,15 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
+# FIXME: get routing for static files working
+# @app.get("/")
+# async def home():
+#     return FileResponse("static/index.html")
+
 
 def test_func(input_variable):
     print("Inside test_func")  # Add a print statement
     return {"message": {input_variable}}
-
 
 @app.get("/test/{query}")
 async def test_endpoint(query: int):
@@ -39,13 +43,14 @@ async def test_endpoint(query: int):
 # Implementation: Stack
 ########################################
 # Configure CORS for local dev
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
+# note - This can be removed because the frontend and backend are served from the same origin
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["http://localhost:5173"],  # Allows all origins
+#     allow_credentials=True,
+#     allow_methods=["*"],  # Allows all methods
+#     allow_headers=["*"],  # Allows all headers
+# )
 
 class SecretSantaInput(BaseModel):
     """
@@ -65,9 +70,8 @@ async def generate_secret_santa(input: SecretSantaInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-app.mount("/static", StaticFiles(directory="frontend/dist/", html=True), name="static")  # Serve the static HTML file
-app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))  # enable the route for static assets
-
+app.mount("/static", StaticFiles(directory="./frontend/dist/", html=True), name="static")  # Serve the static HTML file
+app.mount("/assets", StaticFiles(directory="./frontend/dist/assets"))  # enable the route for static assets
 
 ########################################
 # Implementation: Graph
