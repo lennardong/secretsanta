@@ -12,14 +12,15 @@ SERVICE_NAME := santa-service
 REGION := asia-southeast1
 ARTEFACT_REPO := secretsanta-repo
 
-all_local: frontend_build docker_build_local docker_run_local
+all_local: frontend_build local_build local_run
+all_gcp: frontend_build gcp_build gcp_deploy
 
 ################################################################################
-# DOCKER
+# DOCKER LOCAL
 ################################################################################
 
 # Build Docker image
-docker_build_local:
+local_build:
 	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
 # Run Docker container
@@ -29,7 +30,7 @@ docker_build_local:
 # 	# docker_run_local:
 # 	# NOTE: adding the --name flag causes an error
 
-docker_run_local:
+local_run:
 	docker run -p 8080:8080 -e PORT=8080 $(DOCKER_IMAGE):$(DOCKER_TAG)
 
 
@@ -42,7 +43,7 @@ docker_clean_local:
 # Push Docker image to Google Container Registry
 
 ################################################################################
-# GCP
+# GCP DEPLOY
 ################################################################################
 
 # Deploy to Cloud Run
@@ -50,12 +51,14 @@ docker_clean_local:
 # 2) push to container registry 
 # 3) deploy to Cloud Run
 
-gcp_build_img:
-	docker build -t $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) . && \
+# REF for buildx due to M1 : https://stackoverflow.com/questions/66127933/cloud-run-failed-to-start-and-then-listen-on-the-port-defined-by-the-port-envi
+
+gcp_build:
+	docker buildx build --platform linux/amd64 -t $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) . && \
 	docker push $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) && \
 	docker rmi "$(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG)"
 
-gcp_pushToCloudRun:
+gcp_deploy:
 	gcloud services enable run.googleapis.com && \
 	gcloud run deploy $(SERVICE_NAME) \
 		--image $(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(ARTEFACT_REPO)/$(IMAGE_NAME):$(DOCKER_TAG) \
@@ -63,8 +66,6 @@ gcp_pushToCloudRun:
 		--region $(REGION) \
 		--allow-unauthenticated
 
-
-# gcloud builds submit --tag gcr.io/$(PROJECT_ID)/$(DOCKER_IMAGE):$(DOCKER_TAG) .
 ############################################################################### 
 # PYTHON
 ################################################################################
@@ -102,7 +103,3 @@ frontend_build:
 frontend_dev:
 	cd frontend &&\
 	npm run dev
-
-# Run tests
-# test:
-# 	python -m pytest -vv --pyargs -k test_

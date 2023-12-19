@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Misc
 from dataclasses import Field
 from typing import List, Dict, Tuple, Union, Optional
@@ -72,6 +74,16 @@ async def generate_secret_santa(input: SecretSantaInput):
 
 app.mount("/static", StaticFiles(directory="./frontend/dist/", html=True), name="static")  # Serve the static HTML file
 app.mount("/assets", StaticFiles(directory="./frontend/dist/assets"))  # enable the route for static assets
+
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+
+    # Get the port number from the environment variable
+    port = int(os.environ.get("PORT", 8000))
+    # Run the app with the port number
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 ########################################
 # Implementation: Graph
