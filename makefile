@@ -23,22 +23,8 @@ all_gcp: frontend_build gcp_build gcp_deploy
 local_build:
 	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
-# Run Docker container
-# docker_run_local:
-# 	docker run -p 8080:8080 -e PORT=8080 --name secretsanta_container $(DOCKER_IMAGE):$(DOCKER_TAG)
-# 	# docker run -p 8080:8080 -e PORT=8080 $(DOCKER_IMAGE):$(DOCKER_TAG) 
-# 	# docker_run_local:
-# 	# NOTE: adding the --name flag causes an error
-
 local_run:
 	docker run -p 8080:8080 -e PORT=8080 $(DOCKER_IMAGE):$(DOCKER_TAG)
-
-
-# Clean up images and containers
-docker_clean_local:
-	docker stop $$(docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}') && \
-	docker rm $$(docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}') && \
-	docker rmi "$(DOCKER_IMAGE):$(DOCKER_TAG)"
 
 local_cleanup:
 	docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}' | xargs -r docker stop
