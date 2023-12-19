@@ -12,7 +12,7 @@ SERVICE_NAME := santa-service
 REGION := asia-southeast1
 ARTEFACT_REPO := secretsanta-repo
 
-all_local: frontend_build local_build local_run
+all_local: frontend_build local_cleanup local_build local_run
 all_gcp: frontend_build gcp_build gcp_deploy
 
 ################################################################################
@@ -40,7 +40,11 @@ docker_clean_local:
 	docker rm $$(docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}') && \
 	docker rmi "$(DOCKER_IMAGE):$(DOCKER_TAG)"
 
-# Push Docker image to Google Container Registry
+local_cleanup:
+	docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}' | xargs -r docker stop
+	docker ps -a | grep "$(DOCKER_IMAGE)" | awk '{print $$1}' | xargs -r docker rm
+	docker images "$(DOCKER_IMAGE):$(DOCKER_TAG)" | grep -q . && docker rmi "$(DOCKER_IMAGE):$(DOCKER_TAG)" || true
+
 
 ################################################################################
 # GCP DEPLOY
