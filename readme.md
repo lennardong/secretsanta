@@ -2,6 +2,8 @@
 
 This is a fun repo to work through the secret santa problem. 
 
+(TODO: To update with actual dev notes once they're cleaned up)
+
 # Overall Architecture
 
 Lets walk through the concepts so you understand the architecture 
