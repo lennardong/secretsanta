@@ -1,48 +1,61 @@
-# Secret Santa 
+# SecretSanta Matchmaker
 
-This is a fun repo to work through the secret santa problem. 
+**Backstory**
 
-(TODO: To update with actual dev notes once they're cleaned up)
+This is a fun holiday project to help SecretSanta Matchmaking for extended families and friends.
+(After a heavy stretch of research and papers with serious sounding names (“... albation study of ...”), I felt it was time to bring some fun back into technology.) 
 
-# Overall Architecture
+**🎄 What's Secret Santa?**
+- Its a gift-pairing tool that matches up people while respecting do's and do-not's.
+- Think:
+- ... Wolverine shouldn't be paired with Cyclops (relationship too cool),
+- ... Peter Parker shouldn't be paired with Mary Jane (relationship too warm).
 
-Lets walk through the concepts so you understand the architecture 
+**🔧 What was being explored?**
+- I was curious to explore the JAMstack idea a nudge further.
+- This project blends the fun of svelte with the familiarity of a python backend.
+- It also does away with microservices and manages it as a single monolothic deploy. 
 
-## Backend Infrastructure
+**💻️ Keen to Try It?** 
+- App Website - https://lnkd.in/gJbtfQW7 (its janky)
 
-**For infrastructure, you’re going to 1) deploy as source to a 2) container service** 
+---
 
-We'll be using GCP, but the concept is the same for AWS, Azure or other solutions like DigitalOcean / Heroku.
+## Stack
 
-Lets break it down. 
+* Backend: Python, FastAPI, Uvicorn
+* Frontend: Svelte
+* Infrastructure: Docker -> Google Artifact Registry -> Google Cloud Run
 
-### "Deploy to a Container Service"
-> What is a container service? What alternatives are there?
+**Project Structure**
 
-Its helpful to think of this as a ladder that goes from self-managed to fully managed. Let's climb this ladder, starting from the most basic and progressing towards fully automated solutions.
+* `core` - contains the core logic for the app
+* `frontend` - contains the frontend code
+* `archive` - contains the old code that was used to build the app
+* `tests` - contains basic pytests for the app logic
+* `tests_bruno` - contains the tests for the API endpoints
 
-- **Infrastructure as a Service (IaaS), The Barebones Approach:** Here, you rent a virtual machine (VM) and essentially receive a bare shell with an operating system installed. This means you're responsible for setting up everything, from web servers like Nginx and Apache to your application itself. It's like renting an empty room and being responsible for all the furniture and decorations.
-- **Container as a Service (CaaS), Autoscale and Simplified Management:** CaaS takes care of the underlying infrastructure, allowing you to focus on your application. It provides a platform for running containerized applications, offering automatic scaling and resource management. This is like renting a furnished apartment – the basics are taken care of, but you're still responsible for the upkeep and customization.
-- **Function as a Service (FaaS), Leave the Heavy Lifting to the Cloud:** FaaS takes things a step further. You don't even need to manage the application layer; you simply provide the logic in the form of small, focused functions. The FaaS platform handles everything else, from execution to scaling. Think of it like ordering takeout – you just tell the restaurant what you want, and they prepare and deliver it to you.
+**Other Notes**
+* Serving Static Assets - FastAPI used to serve the static assets from Svelte. 
+* Dev/Build: Makefiles used for most of the dev and build processes. Look through it for details
+* Deploying to GCP: this was a real gotcha. in Dockerfile, make sure to specify the OS as linux/amd64. Otherwise, the build will fail with a cryptic error message.
+* Bruno: a really simple and effective tool for testing APIs. Highly recommended for future projects. 
 
-### "Deploy as Source"
+---
 
-> Deploy from source? What does that mean, what are the alternatives?
+## Future Roadmaps
 
-At the end of the day for CaaS, the code still gets packaged into a container and served on a CaaS solution. The main difference lies in *how* the application is prepared and packaged for deployment:
+**Features to add**
+* Admin Saver: Add a way to send out the assignments to the participants
+* Value Add: add a way for participants to add their wishlists
+* Engagement: Implement a bot-driven approach to participation, maybe in WA or a Telegram Chat
+* Make it Interactive: Implement a graph visualization of the match-making process
+* UI: make it MORE 90's CRT with frames or move to a more contemporary aesthetic.
+* URL: link it as a subdomain to my personal website
 
-**Deploying from source:**
+**Technologies / Approaches to try**
+* Think Different: Approach match-making as a graph problem, maybe using a graph database like Neo4J
+* Make it TypeSafe: Use Typescript for the frontend
+* Go "Cloudless": Use a CI/CD pipeline to deploy a custom VM on Digital Ocean or similar
+* GraphQL: might as well try to implement this using GraphQL instead of REST
 
-- **Cloud Build handles the packaging:** Google Cloud Build takes your source code and builds a container image using Buildpacks or a Dockerfile. The buildpack is a fast pre-configured solution (see [https://buildpacks.io/](https://buildpacks.io/)) while a Dockerfile allows fine-grained user configuration. 
-- **Cloud Run serves the container:** Once the image is built, Cloud Run pulls it from Artifact Registry or Cloud Storage and serves it to users.
-
-**Deploying from container:**
-
-- **User builds the container:** You build the container image using Docker and push it to Google Container Registry.
-- **Cloud Run serves the container:** Cloud Run simply pulls the pre-built image from Container Registry and serves it to users.
-
-### Summary
-
-For SecretSanta, you'll be using CaaS deployed from source because it offers a streamlined workflow with automatic builds and updates, allowing you to focus on developing and testing the application efficiently while still getting some experience of the full application process. 
-
-(Additionally, the flexibility of Buildpacks and Dockerfiles provides us with the control and customization you may need for future iterations of the application!)
