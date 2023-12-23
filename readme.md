@@ -1,5 +1,6 @@
 # SecretSanta Matchmaker
 
+![20231223-008067@2x](https://github.com/lennardong/secretsanta/assets/29778721/5de94510-af9c-4ed9-a918-3cc0fc860838)
 This is a fun holiday project to help SecretSanta Matchmaking for extended families and friends.
 (After a heavy stretch of research and papers with serious sounding names (“... albation study of ...”), I felt it was time to bring some fun back into technology.) 
 
