@@ -40,7 +40,7 @@
     <!-- FOOTER -->
 
     <footer id="footer" class="footer">
-      <p>built by lennardong | Github Repo</p>
+      <p>built by lennardong | <a href = "https://github.com/lennardong/secretsanta">Github Repo </a></p>
     </footer>
 
   </div>
