@@ -19,8 +19,6 @@ This is a fun holiday project to help SecretSanta Matchmaking for extended famil
 **💻️ Keen to Try It?** 
 - App Website - https://lnkd.in/gJbtfQW7 (its janky)
 
----
-
 ## Stack
 
 * Backend: Python, FastAPI, Uvicorn
@@ -40,8 +38,6 @@ This is a fun holiday project to help SecretSanta Matchmaking for extended famil
 * Dev/Build: Makefiles used for most of the dev and build processes. Look through it for details
 * Deploying to GCP: this was a real gotcha. in Dockerfile, make sure to specify the OS as linux/amd64. Otherwise, the build will fail with a cryptic error message.
 * Bruno: a really simple and effective tool for testing APIs. Highly recommended for future projects. 
-
----
 
 ## Future Roadmaps
 
