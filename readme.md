@@ -17,7 +17,7 @@ This is a fun holiday project to help SecretSanta Matchmaking for extended famil
 - It also does away with microservices and manages it as a single monolothic deploy. 
 
 **💻️ Keen to Try It?** 
-- App Website - https://lnkd.in/gJbtfQW7 (its janky)
+- App Website - https://santa-service-mp4xuvosiq-as.a.run.app/static/ (its janky)
 
 ## Stack
 
