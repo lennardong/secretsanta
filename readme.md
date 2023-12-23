@@ -1,7 +1,5 @@
 # SecretSanta Matchmaker
 
-**Backstory**
-
 This is a fun holiday project to help SecretSanta Matchmaking for extended families and friends.
 (After a heavy stretch of research and papers with serious sounding names (“... albation study of ...”), I felt it was time to bring some fun back into technology.) 
 
